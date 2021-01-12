@@ -9,7 +9,7 @@ from utils import action_to_array, load_model
 
 
 def train_treechop(data_path, save_path, model_path=None, stack_frames=1, seq_len=64, epochs=10, lr=0.0001):
-    data = TreeChopDataset(data_dir=data_path, stack_k=stack_frames)
+    data = TreeChopDataset(data_dir=data_path, stack=stack_frames)
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     
     if model_path is None:

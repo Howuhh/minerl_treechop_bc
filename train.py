@@ -1,6 +1,7 @@
 import torch
 import torch.nn as nn
 import numpy as np
+import matplotlib.pyplot as plt
 
 from model import ConvNetRGB
 from wrappers import TreeChopDataset

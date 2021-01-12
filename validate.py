@@ -10,7 +10,7 @@ import numpy as np
 from tabulate import tabulate
 
 from model import ConvNetRGB
-from wrappers import FrameSkipWrapper
+from wrappers import FrameSkipWrapper, FrameStackWrapper
 from utils import load_model
 
 # logging.basicConfig(level=logging.DEBUG)
@@ -55,11 +55,14 @@ def validate_policy(env, policies, **kwargs):
         
 
 def main():
-    env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
+    # env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
+    env = FrameStackWrapper(gym.make("MineRLTreechop-v0"))
     env.make_interactive(port=6666, realtime=True)
     
-    model = load_model("models/model_rgb_BCE_50v0.0", "cpu")
-    run_reward = rollout(env, model, video=True)
+    model = load_model("models/model_stack4_BCE_10v0.0")
+    
+    with torch.no_grad():
+        run_reward = rollout(env, model, video=True)
     
     # models = [load_model(path) for path in ["models/model_rgb_BCE_5v0.0", "models/model_rgb_BCE_50v0.0"]]
     # validate_policy(env, models, max_steps=200)

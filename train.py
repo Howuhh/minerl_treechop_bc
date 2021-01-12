@@ -37,8 +37,8 @@ def train_treechop(data_path, save_path, model_path=None, stack_frames=1, seq_le
 
             loss.backward()
             optimizer.step()
-            print(loss)
-
+            
+        
         torch.save(model, save_path)
         errors.append(np.mean(epoch_errors))
         print(f"Epoch {epoch}:", errors[epoch])

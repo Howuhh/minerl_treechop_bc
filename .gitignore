@@ -1,0 +1,14 @@
+__pycache__
+.vscode
+.ipynb_checkpoints
+.DS_Store
+
+test_obs.pkl
+test_seq.pkl
+
+logs
+videos
+data/
+
+data_test.ipynb
+

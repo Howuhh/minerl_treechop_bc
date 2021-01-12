@@ -1,15 +1,15 @@
 import torch
 import torch.nn as nn
+import numpy as np
 
 from model import ConvNetRGB
 from wrappers import TreeChopDataset
 from utils import action_to_array, load_model
 
 
-
 def train_treechop(data_path, save_path, model_path=None, stack_frames=1, seq_len=64, epochs=10, lr=0.0001):
     data = TreeChopDataset(data_dir=data_path, stack_k=stack_frames)
-    device =  torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
+    device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     
     if model_path is None:
         model = ConvNetRGB(in_channels=3*stack_frames).to(device)
@@ -37,7 +37,6 @@ def train_treechop(data_path, save_path, model_path=None, stack_frames=1, seq_le
 
             loss.backward()
             optimizer.step()
-            
         
         torch.save(model, save_path)
         errors.append(np.mean(epoch_errors))

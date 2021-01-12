@@ -1,6 +1,8 @@
 # MineRL TreeChop with Behavioural Cloning
 
-[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://github.com/Howuhh/minerl_treechop_bc/blob/main/run_colab.ipynb)
+[![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](https://colab.research.google.com/github/Howuhh/minerl_treechop_bc/blob/main/run_colab.ipynb)
+
+
 
 ## Run rollout with trained model
 

@@ -12,6 +12,8 @@ def train_treechop(data_path, save_path, model_path=None, stack_frames=1, seq_le
     data = TreeChopDataset(data_dir=data_path, stack=stack_frames)
     device = torch.device('cuda:0' if torch.cuda.is_available() else 'cpu')
     
+    print(device)
+    
     if model_path is None:
         model = ConvNetRGB(in_channels=3*stack_frames).to(device)
     else:
@@ -38,7 +40,10 @@ def train_treechop(data_path, save_path, model_path=None, stack_frames=1, seq_le
 
             loss.backward()
             optimizer.step()
-        
+            
+            if i % 1000:
+                print(f"Epoch {epoch} -- Iteration {i} -- Loss {loss}")
+            
         torch.save(model, save_path)
         errors.append(np.mean(epoch_errors))
         print(f"Epoch {epoch}:", errors[epoch])

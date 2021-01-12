@@ -61,7 +61,7 @@ def main():
     env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
     env.make_interactive(port=6666, realtime=True)
     
-    model = load_model("models/test_rnn_model")
+    model = load_model("models/model_stack4_BCE_10v0.0")
     
     with torch.no_grad():
         run_reward = rollout(env, model, video=False)

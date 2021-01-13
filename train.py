@@ -14,6 +14,7 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_
     print("Training on: ", device)
     
     if load_path is None:
+        # TODO: Не обязательно 3 канала, может 1 если чб, надо поправить
         model = ConvNetRGB(in_channels=3*stack_frames).to(device)
     else:
         model = load_model(load_path, device)
@@ -39,9 +40,6 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_
 
             loss.backward()
             optimizer.step()
-            
-            if i % 1000 == 0:
-                print(f"Epoch {epoch} -- Iteration {i} -- Loss {loss}")
             
         torch.save(model, save_path + experiment_name)
         errors.append(np.mean(epoch_errors))

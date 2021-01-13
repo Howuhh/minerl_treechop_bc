@@ -4,6 +4,10 @@ import numpy as np
 
 from collections import deque
 
+# TODO: add grey scale wrapper
+class GreyScaleWrapper(gym.Wrapper):
+    pass
+
 
 class FrameSkipWrapper(gym.Wrapper):
     def __init__(self, env, skip=4):
@@ -52,6 +56,7 @@ class FrameStackWrapper(gym.Wrapper):
         return self._stack_to_obs(), reward, done, info
         
 
+
 class TreeChopDataset:
     def __init__(self, data_dir, stack=1):
         self.data = minerl.data.make("MineRLTreechop-v0", data_dir=data_dir)
@@ -65,6 +70,7 @@ class TreeChopDataset:
     def seq_iter(self, seq_len):
         for state, action, _, _, _ in self.data.batch_iter(batch_size=1, num_epochs=1, seq_len=seq_len):
             state = state["pov"][0]
+            # TODO: add grey scale 
             
             if self.stack > 1:
                 new_state = np.zeros((*state.shape[:3], state.shape[3] * self.stack))  # [batch, 64, 64, 3] -> [batch, 64, 64, 3 * k]

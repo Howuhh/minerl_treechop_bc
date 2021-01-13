@@ -1,23 +1,22 @@
 import torch
 import torch.nn as nn
 import numpy as np
-import matplotlib.pyplot as plt
 
 from model import ConvNetRGB
 from wrappers import TreeChopDataset
 from utils import action_to_array, load_model
 
 
-def train_treechop(data_path, save_path, model_path=None, stack_frames=1, seq_len=64, epochs=10, lr=0.0001):
+def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_frames=1, seq_len=64, epochs=10, lr=0.0001):
     data = TreeChopDataset(data_dir=data_path, stack=stack_frames)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     print("Training on: ", device)
     
-    if model_path is None:
+    if load_path is None:
         model = ConvNetRGB(in_channels=3*stack_frames).to(device)
     else:
-        model = load_model(model_path, device)
+        model = load_model(load_path, device)
 
     optimizer = torch.optim.Adam(model.parameters(), lr=lr)
     camera_loss, action_loss = nn.MSELoss(), nn.BCELoss()
@@ -41,16 +40,14 @@ def train_treechop(data_path, save_path, model_path=None, stack_frames=1, seq_le
             loss.backward()
             optimizer.step()
             
-            if i % 1000:
+            if i % 1000 == 0:
                 print(f"Epoch {epoch} -- Iteration {i} -- Loss {loss}")
             
-        torch.save(model, save_path)
+        torch.save(model, save_path + experiment_name)
         errors.append(np.mean(epoch_errors))
-        print(f"Epoch {epoch}:", errors[epoch])
+        print(f"Epoch {epoch} -- Mean Loss {errors[epoch]}")
 
-    plt.figure(figsize=(12, 9))
-    plt.plot(np.arange(epochs), errors)
-
+    np.save(save_path + experiment_name + '_log.npy', np.array(errors))
     
 if __name__ == "__main__":
-    train_treechop("data", "model/test_model", seq_len=200, stack_frames=2, lr=1e-3)
+    train_treechop("test_model", "data", "model/", seq_len=200, stack_frames=2, lr=1e-3)

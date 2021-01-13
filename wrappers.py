@@ -69,7 +69,7 @@ class TreeChopDataset:
             if self.stack > 1:
                 new_state = np.zeros((*state.shape[:3], state.shape[3] * self.stack))  # [batch, 64, 64, 3] -> [batch, 64, 64, 3 * k]
 
-                for _ in range(self.k):
+                for _ in range(self.stack):
                     self.frame_stack.append(state[0])
                 
                 new_state[0, :, :, :] = self._stack_to_obs()

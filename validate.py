@@ -56,12 +56,12 @@ def validate_policy(env, policies, **kwargs):
 
 def main():
     # env = FrameSkipWrapper(
-    #         FrameStackWrapper(gym.make("MineRLTreechop-v0"))
+    #         FrameStackWrapper(gym.make("MineRLTreechop-v0"), 2)
     #     )
     env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
     env.make_interactive(port=6666, realtime=True)
     
-    model = load_model("models/model_stack4_BCE_10v0.0")
+    model = load_model("models/first_model_stack1_BCE_50_1200")
     
     with torch.no_grad():
         run_reward = rollout(env, model, video=False)

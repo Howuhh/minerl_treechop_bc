@@ -45,6 +45,7 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_
         errors.append(np.mean(epoch_errors))
         print(f"Epoch {epoch} -- Mean Loss {errors[epoch]}")
 
+    # TODO: save std also, mb write logger class??
     np.save(save_path + experiment_name + '_log.npy', np.array(errors))
     
 if __name__ == "__main__":

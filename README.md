@@ -12,7 +12,7 @@ from wrapper import FrameSkipWrapper
 env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
 env.make_interactive(port=6666, realtime=True)
     
-model = load_model("models/model_rgb_BCE_50v0.0", "cpu")
+model = load_model("models/first_model_stack1_BCE_50_1200", "cpu")
 
 rollout(env, model)
 ```

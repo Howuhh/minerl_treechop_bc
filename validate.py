@@ -24,9 +24,7 @@ def rollout(env, policy, max_steps=50, video=False):
     
     while not done and steps <= max_steps:
         if video:
-            for i in range(4):
-                video_frames.append(obs["pov"][:, :, :3])
-            # video_frames.append(obs["pov"][:, :, :3])
+            video_frames.append(obs["pov"][:, :, :3])
 
         action = policy.predict(torch.tensor(obs["pov"]).float())
         obs, reward, done, info = env.step(action)
@@ -41,6 +39,7 @@ def rollout(env, policy, max_steps=50, video=False):
     return total_reward
 
 
+# TODO: для каждой модели нужен свой враппер для env, добавить
 def validate_policy(env, policies, **kwargs):
     if not isinstance(policies, list):
         policies = [policies]
@@ -57,20 +56,16 @@ def validate_policy(env, policies, **kwargs):
         
 
 def main():
-    # env = FrameSkipWrapper(
-    #         FrameStackWrapper(gym.make("MineRLTreechop-v0"), 2)
-    #     )
-    env = FrameStackWrapper(FrameSkipWrapper(GreyScaleWrapper(gym.make("MineRLTreechop-v0"))))
+    env = FrameSkipWrapper(
+            FrameStackWrapper(gym.make("MineRLTreechop-v0"), 4)
+        )
+    # env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
     env.make_interactive(port=6666, realtime=True)
     
-    # model = load_model("D:\Python_proj\MineRL\minerl_treechop_bc\models\model_stack4_BCE_50_1200")
-    model = load_model(r"D:\Python_proj\MineRL\minerl_treechop_bc\models\test_model")
-
+    model = load_model("models/model_stack4_BCE_50_1200")
+    
     with torch.no_grad():
         run_reward = rollout(env, model, video=True)
-    
-    # models = [load_model(path) for path in ["models/model_rgb_BCE_5v0.0", "models/model_rgb_BCE_50v0.0"]]
-    # validate_policy(env, models, max_steps=200)
     
 
 if __name__ == "__main__":

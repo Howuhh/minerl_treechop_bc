@@ -48,6 +48,3 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, greysc
     # TODO: save std also, mb write logger class??
     np.save(save_path + experiment_name + '_log.npy', np.array(errors))
     
-if __name__ == "__main__":
-    pass
-    # train_treechop("test_model", "data", "model/", seq_len=200, stack_frames=2, lr=1e-3)

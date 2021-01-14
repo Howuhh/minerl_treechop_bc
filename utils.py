@@ -2,6 +2,26 @@ import torch
 import numpy as np
 
 
+def rgb_to_grey(img):
+    """
+    Convert image from rgb to grey scale.
+
+    Parameters
+    ----------
+    img: np.ndarray, shape [batch, H, W, 3]
+        Single image or batch of images.
+
+    Returns
+    -------
+    np.ndarray, shape [batch, H, W, 1]
+        Grey scaled image or batch of images. 
+    
+    """
+    rgb_to_grey_vec = np.array([0.2989, 0.5870, 0.1140]).reshape(-1, 1)
+    
+    return img @ rgb_to_grey_vec
+
+
 def action_to_array(action_dict, seq_len):
     action_array = np.zeros((seq_len, 5))
     action_names = ["forward", "jump", "attack"]

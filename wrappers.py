@@ -4,26 +4,7 @@ import imageio
 import numpy as np
 
 from collections import deque
-
-
-def rgb_to_grey(img):
-    """
-    Convert image from rgb to grey scale.
-
-    Parameters
-    ----------
-    img: np.ndarray, shape [batch, H, W, 3]
-        Single image or batch of images.
-
-    Returns
-    -------
-    np.ndarray, shape [batch, H, W, 1]
-        Grey scaled image or batch of images. 
-    
-    """
-    rgb_to_grey_vec = np.array([0.2989, 0.5870, 0.1140]).reshape(-1, 1)
-    
-    return img @ rgb_to_grey_vec
+from utils import rgb_to_grey
 
 
 class GreyScaleWrapper(gym.Wrapper):

@@ -17,24 +17,20 @@ logging.basicConfig(level=logging.DEBUG)
         
         
 def rollout(env, policy, max_steps=50, video=False):
-    video_frames = []
-    
+    if video:
+        env = gym.wrappers.monitor.Monitor(env, f"videos/{policy.name}/rollout_{str(uuid.uuid4())}.mp4", resume=True)
+
     obs, done = env.reset(), False
     total_reward, steps = 0.0, 0.0
     
     while not done and steps <= max_steps:
-        if video:
-            video_frames.append(obs["pov"][:, :, :3])
-
         action = policy.predict(torch.tensor(obs["pov"]).float())
+        
         obs, reward, done, info = env.step(action)
         
         total_reward += reward
         steps += 1
-        
-    if video:
-        imageio.mimwrite(f"videos/{policy.name}_rollout{str(uuid.uuid4())}.mp4", video_frames, fps=30.0)
-        
+
     return total_reward
 
 
@@ -58,12 +54,12 @@ def main():
     env = FrameSkipWrapper(
             FrameStackWrapper(gym.make("MineRLTreechop-v0"), 4)
         )
-    env.make_interactive(port=6666, realtime=True)
+    # env.make_interactive(port=6666, realtime=True)
     
     model = load_model("models/model_stack4_BCE_50_1200")
     
     with torch.no_grad():
-        run_reward = rollout(env, model, max_steps=50)
+        run_reward = rollout(env, model, max_steps=50, video=True)
     
 
 if __name__ == "__main__":

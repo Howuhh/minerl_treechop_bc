@@ -16,7 +16,7 @@ from utils import load_model
 logging.basicConfig(level=logging.DEBUG)
         
         
-def rollout(env, policy, max_steps=np.inf, video=False):
+def rollout(env, policy, max_steps=50, video=False):
     video_frames = []
     
     obs, done = env.reset(), False
@@ -26,7 +26,8 @@ def rollout(env, policy, max_steps=np.inf, video=False):
         if video:
             for i in range(4):
                 video_frames.append(obs["pov"][:, :, :3])
-            
+            # video_frames.append(obs["pov"][:, :, :3])
+
         action = policy.predict(torch.tensor(obs["pov"]).float())
         obs, reward, done, info = env.step(action)
         
@@ -59,11 +60,12 @@ def main():
     # env = FrameSkipWrapper(
     #         FrameStackWrapper(gym.make("MineRLTreechop-v0"), 2)
     #     )
-    env = GreyScaleWrapper(FrameStackWrapper(FrameSkipWrapper(gym.make("MineRLTreechop-v0"))))
+    env = FrameStackWrapper(FrameSkipWrapper(GreyScaleWrapper(gym.make("MineRLTreechop-v0"))))
     env.make_interactive(port=6666, realtime=True)
     
-    model = load_model("D:\Python_proj\MineRL\minerl_treechop_bc\models\model_stack4_BCE_50_1200")
-    
+    # model = load_model("D:\Python_proj\MineRL\minerl_treechop_bc\models\model_stack4_BCE_50_1200")
+    model = load_model(r"D:\Python_proj\MineRL\minerl_treechop_bc\models\test_model")
+
     with torch.no_grad():
         run_reward = rollout(env, model, video=True)
     

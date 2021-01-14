@@ -7,8 +7,8 @@ from wrappers import TreeChopDataset
 from utils import action_to_array, load_model
 
 
-def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_frames=1, seq_len=64, epochs=10, lr=0.0001):
-    data = TreeChopDataset(data_dir=data_path, stack=stack_frames)
+def train_treechop(experiment_name, data_path, save_path, greyscale, load_path=None, stack_frames=1, seq_len=64, epochs=10, lr=0.0001):
+    data = TreeChopDataset(data_dir=data_path, stack=stack_frames, greyscale=greyscale)
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     
     print("Training on: ", device)
@@ -40,7 +40,7 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_
 
             loss.backward()
             optimizer.step()
-            
+
         torch.save(model, save_path + experiment_name)
         errors.append(np.mean(epoch_errors))
         print(f"Epoch {epoch} -- Mean Loss {errors[epoch]}")
@@ -50,4 +50,5 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_
     
 if __name__ == "__main__":
     # train_treechop("test_model", "data", "model/", seq_len=200, stack_frames=2, lr=1e-3)
-    train_treechop("test_model", "D:\Python_proj\MineRL\data", "D:\Python_proj\MineRL\minerl_treechop_bc\models\\", seq_len=200, stack_frames=2, lr=1e-3)
+    train_treechop("test_model", "D:\Python_proj\MineRL\data", "D:\Python_proj\MineRL\minerl_treechop_bc\models\\",
+                   greyscale=True, seq_len=200, stack_frames=4, lr=1e-3)

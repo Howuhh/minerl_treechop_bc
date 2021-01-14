@@ -18,7 +18,9 @@ def load_model(model_path, device="cpu"):
     model = torch.load(model_path, map_location=torch.device(device))
     model.eval()
     
-    model.name = model_path.split("/")[-1]
+    # for old versions of models
+    if not hasattr(model, "name"):
+        model.name = model_path.split("/")[-1]
     
     return model
     

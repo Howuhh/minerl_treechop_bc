@@ -1,8 +1,10 @@
 import gym
 import minerl
+import imageio
 import numpy as np
 
 from collections import deque
+
 
 # TODO: add grey scale wrapper
 class GreyScaleWrapper(gym.Wrapper):

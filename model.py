@@ -6,8 +6,9 @@ import torch.nn.functional as F
 
 
 class ConvNetRGB(nn.Module):
-    def __init__(self, in_channels=3):
+    def __init__(self, name, in_channels=3):
         super().__init__()
+        self.name = name
         
         self.conv1 = nn.Conv2d(in_channels, 32, 8, 4)
         self.conv2 = nn.Conv2d(32, 64, 4, 2)

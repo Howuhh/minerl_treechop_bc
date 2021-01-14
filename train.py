@@ -15,7 +15,7 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_
     
     if load_path is None:
         # TODO: Не обязательно 3 канала, может 1 если чб, надо поправить
-        model = ConvNetRGB(in_channels=3*stack_frames).to(device)
+        model = ConvNetRGB(name=experiment_name, in_channels=3*stack_frames).to(device)
     else:
         model = load_model(load_path, device)
 

@@ -8,6 +8,7 @@ import gym
 from model import ConvNetRGB  # import needed for torch.load
 from utils import load_model
 from wrapper import FrameSkipWrapper
+from validate import rollout
 
 env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
 env.make_interactive(port=6666, realtime=True)

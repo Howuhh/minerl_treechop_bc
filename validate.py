@@ -9,7 +9,7 @@ import numpy as np
 
 from tabulate import tabulate
 
-from model import ConvNetRGB, ConvRNN
+from model import ConvNetRGB
 from wrappers import FrameSkipWrapper, FrameStackWrapper
 from utils import load_model
 
@@ -25,7 +25,7 @@ def rollout(env, policy, max_steps=np.inf, video=False):
     
     while not done and steps <= max_steps:
         if video:
-            video_frames.append(obs["pov"])
+            video_frames.append(obs["pov"][:, :, :3])
         
         action = policy.predict(torch.tensor(obs["pov"]).float())
         obs, reward, done, info = env.step(action)
@@ -39,6 +39,7 @@ def rollout(env, policy, max_steps=np.inf, video=False):
     return total_reward
 
 
+# TODO: для каждой модели нужен свой враппер для env, добавить
 def validate_policy(env, policies, **kwargs):
     if not isinstance(policies, list):
         policies = [policies]
@@ -55,16 +56,16 @@ def validate_policy(env, policies, **kwargs):
         
 
 def main():
-    # env = FrameSkipWrapper(
-    #         FrameStackWrapper(gym.make("MineRLTreechop-v0"), 2)
-    #     )
-    env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
+    env = FrameSkipWrapper(
+            FrameStackWrapper(gym.make("MineRLTreechop-v0"), 4)
+        )
+    # env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
     env.make_interactive(port=6666, realtime=True)
     
-    model = load_model("models/first_model_stack1_BCE_50_1200")
+    model = load_model("models/model_stack4_BCE_50_1200")
     
     with torch.no_grad():
-        run_reward = rollout(env, model, video=False)
+        run_reward = rollout(env, model, video=True)
     
     # models = [load_model(path) for path in ["models/model_rgb_BCE_5v0.0", "models/model_rgb_BCE_50v0.0"]]
     # validate_policy(env, models, max_steps=200)

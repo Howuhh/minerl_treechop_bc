@@ -14,8 +14,8 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_
     print("Training on: ", device)
     
     if load_path is None:
-        # TODO: Не обязательно 3 канала, может 1 если чб, надо поправить
-        model = ConvNetRGB(in_channels=3*stack_frames).to(device)
+        in_channels = stack_frames if data.greyscale else 3 * stack_frames
+        model = ConvNetRGB(in_channels=in_channels).to(device)
     else:
         model = load_model(load_path, device)
 
@@ -49,4 +49,5 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, stack_
     np.save(save_path + experiment_name + '_log.npy', np.array(errors))
     
 if __name__ == "__main__":
-    train_treechop("test_model", "data", "model/", seq_len=200, stack_frames=2, lr=1e-3)
+    # train_treechop("test_model", "data", "model/", seq_len=200, stack_frames=2, lr=1e-3)
+    train_treechop("test_model", "D:\Python_proj\MineRL\data", "D:\Python_proj\MineRL\minerl_treechop_bc\models\\", seq_len=200, stack_frames=2, lr=1e-3)

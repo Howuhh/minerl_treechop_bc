@@ -10,15 +10,14 @@ import numpy as np
 from tabulate import tabulate
 
 from model import ConvNetRGB
-from wrappers import FrameSkipWrapper, FrameStackWrapper
+from wrappers import FrameSkipWrapper, FrameStackWrapper, GreyScaleWrapper
 from utils import load_model
 
 logging.basicConfig(level=logging.DEBUG)
         
         
-def rollout(env, policy, max_steps=np.inf, video=False):
-    if video:
-        video_frames = []
+def rollout(env, policy, max_steps=50, video=False):
+    video_frames = []
     
     obs, done = env.reset(), False
     total_reward, steps = 0.0, 0.0
@@ -26,7 +25,7 @@ def rollout(env, policy, max_steps=np.inf, video=False):
     while not done and steps <= max_steps:
         if video:
             video_frames.append(obs["pov"][:, :, :3])
-        
+
         action = policy.predict(torch.tensor(obs["pov"]).float())
         obs, reward, done, info = env.step(action)
         

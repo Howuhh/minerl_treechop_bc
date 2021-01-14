@@ -23,3 +23,7 @@ Also, to interact with the agent during rollout (after the world is created):
 ```bash
 python -m minerl.interactor 6666
 ```
+
+# Agent example
+
+TODO: add example gif 

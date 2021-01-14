@@ -9,7 +9,8 @@ run.ipynb
 
 logs
 videos
-data/
+data
+train_logs
 
 data_test.ipynb
 

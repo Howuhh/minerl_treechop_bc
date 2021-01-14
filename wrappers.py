@@ -13,11 +13,11 @@ class GreyScaleWrapper(gym.Wrapper):
 
     def step(self, action):
         obs, reward, done, info = self.env.step(action)
-        return {'pov': rgb_to_grey(obs['pov'])}, reward, done, info
+        return {"pov": rgb_to_grey(obs["pov"])}, reward, done, info
 
     def reset(self):
         obs = self.env.reset()
-        return {'pov': rgb_to_grey(obs['pov'])}
+        return {"pov": rgb_to_grey(obs["pov"])}
 
 
 class FrameSkipWrapper(gym.Wrapper):

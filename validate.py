@@ -9,12 +9,11 @@ import numpy as np
 
 from tabulate import tabulate
 
+from utils import load_model
 from model import ConvNetRGB
 from wrappers import FrameSkipWrapper, FrameStackWrapper, GreyScaleWrapper
-from utils import load_model
 
-logging.basicConfig(level=logging.DEBUG)
-        
+# logging.basicConfig(level=logging.DEBUG)      
 
 def rollout(env, policy, max_steps=np.inf, video=False, seed=None):
     if video:
@@ -40,8 +39,7 @@ def rollout(env, policy, max_steps=np.inf, video=False, seed=None):
 def validate_policy(policies_with_envs, n_evals=5, **kwargs):
     table = [["policy", f"mean reward (N={n_evals}, args: {kwargs})", "std"]]
     
-    # TODO: add tqdm
-    for policy, env in policies_with_envs:
+    for policy, env in tqdm(policies_with_envs):
         policy_rewards = [rollout(env, policy, **kwargs) for _ in range(n_evals)]
         
         table.append([policy.name, np.mean(policy_rewards), np.std(policy_rewards)])
@@ -80,5 +78,5 @@ def main():
     
 
 if __name__ == "__main__":
-    main()
-    # main_validate()
+    # main()
+    main_validate()

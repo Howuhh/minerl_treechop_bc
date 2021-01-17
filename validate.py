@@ -34,7 +34,6 @@ def rollout(env, policy, max_steps=np.inf, video=False):
     return total_reward
 
 
-# TODO: для каждой модели нужен свой враппер для env, добавить
 def validate_policy(policies_with_envs, n_evals=5, **kwargs):
     table = [["policy", f"mean reward (N=5, args: {kwargs})", "std"]]
     
@@ -71,5 +70,5 @@ def main():
     
 
 if __name__ == "__main__":
-    # main()
-    main_validate()
+    main()
+    # main_validate()

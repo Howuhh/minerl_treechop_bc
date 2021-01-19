@@ -44,8 +44,4 @@ def train_treechop(experiment_name, data_path, save_path, load_path=None, greysc
         torch.save(model, save_path + experiment_name)
         errors.append(np.mean(epoch_errors))
         print(f"Epoch {epoch} -- Mean Loss {errors[epoch]}")
-
-    # TODO: save std also, mb write logger class??
-    # temporary commented
-    # np.save(save_path + experiment_name + '_log.npy', np.array(errors))
     

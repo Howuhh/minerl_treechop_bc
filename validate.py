@@ -1,5 +1,4 @@
 import gym
-import tqdm
 import uuid
 import torch
 import minerl
@@ -7,17 +6,19 @@ import logging
 
 import numpy as np
 
+from tqdm import tqdm
 from tabulate import tabulate
 
 from utils import load_model
 from model import ConvNetRGB
-from wrappers import FrameSkipWrapper, FrameStackWrapper, GreyScaleWrapper
+from wrappers import FrameSkipWrapper, FrameStackWrapper, GreyScaleWrapper, wrap_env
 
 # logging.basicConfig(level=logging.DEBUG)      
 
+
 def rollout(env, policy, max_steps=np.inf, video=False, seed=None):
     if video:
-        env = gym.wrappers.monitor.Monitor(env, f"videos/{policy.name}/rollout_{str(uuid.uuid4())}", resume=True)
+        env = wrap_env(env, video=f"videos/{policy.name}")
 
     if seed is not None:
         env.seed(seed=seed)  # seed for minecraft world generation
@@ -50,33 +51,30 @@ def validate_policy(policies_with_envs, n_evals=5, **kwargs):
 def main_validate():
     env = gym.make("MineRLTreechop-v0")
     
-    # policy_env = (
-    #     (load_model("models/model_stack1_BCE_50_1200"), env),
-    #     (load_model("models/model_stack2_BCE_50_1200"), FrameStackWrapper(env, 2)),
-    #     (load_model("models/model_stack4_BCE_50_1200"), FrameStackWrapper(env, 4)),
-    #     (load_model("models/stack1_BCE_50_1200_grey"), GreyScaleWrapper(env)),
-    #     (load_model("models/stack2_BCE_50_1200_grey"), FrameStackWrapper(GreyScaleWrapper(env), 2)),   
-    #     (load_model("models/stack4_BCE_50_1200_grey"), FrameStackWrapper(GreyScaleWrapper(env), 4)), 
-    # )
     policy_env = (
-        (load_model("models/stack2_BCE_20_1200_rgb"), FrameSkipWrapper(FrameStackWrapper(env, 2))),
-        (load_model("models/stack2_BCE_20_1200_rgb"), FrameStackWrapper(FrameSkipWrapper(env), 2))
+        (load_model("models/stack1_BCE_50_1200_rgb"), wrap_env(env, frame_skip=4)),
+        (load_model("models/stack2_BCE_50_1200_rgb"), wrap_env(env, frame_stack=2, frame_skip=4)),
+        (load_model("models/stack4_BCE_50_1200_rgb"), wrap_env(env, frame_stack=4, frame_skip=4)),
     )
-    
+    # policy_env = (
+    #     (load_model("models/stack2_BCE_50_1200_rgb"), FrameSkipWrapper(FrameStackWrapper(env, 2))),
+    #     (load_model("models/stack2_BCE_20_1200_rgb"), FrameSkipWrapper(FrameStackWrapper(env, 2)))
+    # )
+
     with torch.no_grad():
-        validate_policy(policy_env, n_evals=5, max_steps=500, seed=42)
+        validate_policy(policy_env, n_evals=15, max_steps=500, seed=23)
 
 
 def main():
-    env = FrameSkipWrapper(FrameStackWrapper(gym.make("MineRLTreechop-v0"), 2))
+    env = wrap_env(gym.make("MineRLTreechop-v0"), frame_skip=4, frame_stack=4)
     env.make_interactive(port=6666, realtime=True)
     
-    model = load_model("models/stack2_BCE_20_1200_rgb")
+    model = load_model("models/stack4_BCE_50_1200_rgb")
     
     with torch.no_grad():
-        run_reward = rollout(env, model, video=True)
+        run_reward = rollout(env, model, max_steps=100, video=True)
     
 
 if __name__ == "__main__":
-    # main()
-    main_validate()
+    main()
+    # main_validate()

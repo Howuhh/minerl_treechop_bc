@@ -1,3 +1,4 @@
+import uuid
 import gym
 import minerl
 import imageio
@@ -5,6 +6,18 @@ import numpy as np
 
 from collections import deque
 from utils import rgb_to_grey
+
+
+def wrap_env(env, grey_scale=False, frame_stack=None, frame_skip=None, video=None):
+    if grey_scale:
+        env = GreyScaleWrapper(env)
+    if frame_stack is not None:
+        env = FrameStackWrapper(env, stack=frame_stack)
+    if frame_skip is not None:
+        env = FrameSkipWrapper(env, skip=frame_skip)
+    if video is not None:
+        env = gym.wrappers.monitor.Monitor(env, f"{video}/rollout_{str(uuid.uuid4())}", resume=True)
+    return env
 
 
 class GreyScaleWrapper(gym.Wrapper):

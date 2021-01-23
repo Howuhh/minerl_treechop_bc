@@ -4,7 +4,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-
+# TODO: add RNN model & ABC class for models
 class ConvNetRGB(nn.Module):
     def __init__(self, name, in_channels=3):
         super().__init__()

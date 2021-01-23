@@ -56,10 +56,6 @@ def main_validate():
         (load_model("models/stack2_BCE_50_1200_rgb"), wrap_env(env, frame_stack=2, frame_skip=4)),
         (load_model("models/stack4_BCE_50_1200_rgb"), wrap_env(env, frame_stack=4, frame_skip=4)),
     )
-    # policy_env = (
-    #     (load_model("models/stack2_BCE_50_1200_rgb"), FrameSkipWrapper(FrameStackWrapper(env, 2))),
-    #     (load_model("models/stack2_BCE_20_1200_rgb"), FrameSkipWrapper(FrameStackWrapper(env, 2)))
-    # )
 
     with torch.no_grad():
         validate_policy(policy_env, n_evals=15, max_steps=500, seed=23)

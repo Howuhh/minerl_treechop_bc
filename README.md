@@ -1,4 +1,4 @@
-# MineRL TreeChop with Behavioural Cloning
+# TreeChop with Behavioural Cloning
 
 ## Run rollout with trained model
 
@@ -14,10 +14,10 @@ from validate import rollout
 env = FrameSkipWrapper(gym.make("MineRLTreechop-v0"))
 env.make_interactive(port=6666, realtime=True)
     
-model = load_model("models/model_stack1_BCE_50_1200", device="cpu")
+model = load_model("models/stack1_BCE_50_1200_rgb")
 
 # will save rollout video on ./video/model_name/
-rollout(env, model, max_steps=2000, video=True)  
+rollout(env, model, max_steps=500, video=True)  
 ```
 
 Also, to interact with the agent during rollout (after the world is created):
@@ -28,4 +28,4 @@ python -m minerl.interactor 6666
 
 # Example Agent Trajectory
 
-TODO: add example gif 
+<img src="example_rollout.gif" width="256" height="256" />
